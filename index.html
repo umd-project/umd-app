@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>UMD: App</title>
+    <meta name="og:description" content="The Universal Markup Document app">
+    <meta property="og:title" content="UMD: App" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/assets/images/logo-300x300.png">
+    <meta property="og:image:width" content="300">
+    <meta property="og:image:height" content="300">
+    <!-- Manifest for PWA app currently disabled
+        
+    <link rel="manifest" href="manifest.json"> -->
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="UMD: App">
+    <!-- blank app icon -->
+    <!--     <link rel="icon" href="data:;base64,iVBORw0KGgo="> -->
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfkDBcPCg5fNPOjAAAAbklEQVQY062OzQqDMBgE90tSQcEgLULpIe//WOI1rVBKQ/xJ1kMR6j0De5nLjjicUSgj+C8MeKkiNZCUXQJhULtmsB22r76PVx8VWz11jzV+eszGWhqZuN6ePqdQx/b9EnEAQAEoUPm4ld9yofQdU40kXdxM03wAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjAtMTItMjNUMTU6MTA6MjkrMDY6MDBTw++nAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIwLTEyLTIzVDE1OjEwOjE0KzA2OjAwzcYxOAAAAABJRU5ErkJggg==">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/app.css">
+    <link rel="stylesheet" href="../assets/css/quill.snow.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XTPW58QZ2F"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-XTPW58QZ2F');
+    </script>
+
+    <!-- javascript -->
+    <script defer type="module" src="./dist/app.min.js"></script>
+</head>
+
+<body>
+    <div class="main-container" hidden>
+        <header>
+            <a href="/">
+                <div class="umd-logo"></div>
+            </a>
+        </header>
+        <div class="tab-bar invisible">
+            <div id="tab-drive" class="tab" title="google drive authorisation" hidden>
+                <div></div>
+                <div class="tab-title">Drive</div>
+            </div>
+            <div id="tab-new" class="tab" title="new tab">
+                <div></div>
+                <div class="tab-title icon-L">&plus;</div>
+                <div></div>
+            </div>
+        </div>
+        <div class="tab-container">
+            <div id="doc-new" class="doc new-container">
+                <div class="filer-container">
+                    <h3>Universal Markup Document</h3>
+                    <h6>&nbsp;</h6>
+                    <button new-button class="standard">New Document</button>
+                    <h5>-- or --</h5>
+                    <button open-button class="standard">Open Document</button>
+                    <input file-input type="file" accept=".umd, .umb" hidden>
+                    <h5>-- or --</h5>
+                    <input url-input class="standard" type="text" placeholder="enter doc link">
+                    <div class="spacer-8"></div>
+                    <h6 terms class="spacer-32 link" data-url="../examples/files/terms.umd">Terms of Use</h6>
+                </div>
+                <div class="password-container visuallyhidden">
+                    <div class="r1c1 message">Enter Password</div>
+                    <div password-close class="r1c2 action">&#10005;</div>
+                    <input password-input class="r2 standard" type="password" placeholder="enter protection password">
+                </div>
+            </div>
+            <div id="doc-drive" class="doc drive-container visuallyhidden">
+                <div class="message">Google Drive Authentication</div>
+                <button google-authorise class="standard" hidden>Authorise</button>
+                <button google-signout class="standard" hidden>Signout</button>
+                <div google-error hidden class="small"></div>
+            </div>
+            <div class="footer">
+                <img src="https://img.shields.io/badge/©-RmR-yellow">
+                <img src="https://img.shields.io/badge/ver-0.4.4-blue">
+                <a href="https://twitter.com/UmdProject?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @UmdProject</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

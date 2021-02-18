@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>{{ page.title }}</title>
+  <meta name="og:description" content="The UMD Project defines a format spec for the UMD Document: one format that fits all">
+  <meta property="og:title" content="{{ page.title }}" />
+  <meta property="og:type" content="website" />
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="{{ page.title }}">
+
+  <meta property="og:image" content="/assets/images/logo-300x300.png">
+  <meta property="og:image:width" content="300">
+  <meta property="og:image:height" content="300">
+
+  <!-- blank app icon -->
+  <!-- <link rel="icon" href="data:;base64,iVBORw0KGgo="> -->
+  <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfkDBcPCg5fNPOjAAAAbklEQVQY062OzQqDMBgE90tSQcEgLULpIe//WOI1rVBKQ/xJ1kMR6j0De5nLjjicUSgj+C8MeKkiNZCUXQJhULtmsB22r76PVx8VWz11jzV+eszGWhqZuN6ePqdQx/b9EnEAQAEoUPm4ld9yofQdU40kXdxM03wAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjAtMTItMjNUMTU6MTA6MjkrMDY6MDBTw++nAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIwLTEyLTIzVDE1OjEwOjE0KzA2OjAwzcYxOAAAAABJRU5ErkJggg==">
+
+
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XTPW58QZ2F"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-XTPW58QZ2F');
+  </script>
+</head>
+
+
+<body>
+  <div class="container">
+    <header>
+      <a href="/">
+        <div class="umd-logo"></div>
+      </a>
+      <div></div>
+      <a href="/app" target="_blank">
+        <div class="button app-button">Link to App</div>
+      </a>
+    </header>
+    <div class="content-container">
+      <section class="content">
+        {{ content }}
+      </section>
+      <footer>
+        <img src="https://img.shields.io/badge/©-RmR-yellow">
+        <a href="https://github.com/rrrepos/umd-project" target="_blank"><img
+            src="https://img.shields.io/badge/github-repolink-blue">
+          </a>
+        <img alt="GitHub" src="https://img.shields.io/github/license/rrrepos/test">
+        <a href="https://twitter.com/UmdProject?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @UmdProject</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        <a href="https://umdproject.medium.com/" target="_blank"><img
+          src="https://img.shields.io/badge/medium-umdproject-brightgreen">
+        </a>
+      </footer>
+    </div>
+  </div>
+</body>
+
+</html>

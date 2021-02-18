@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "org.umdproject.umdapp",
+    "sha256_cert_fingerprints": [
+      "9D:76:4B:E0:70:2A:6B:AF:DF:89:4D:66:8A:35:A2:73:0A:1B:D7:FD:41:61:3B:9F:9C:12:4B:16:4B:8C:B9:47"
+    ]
+  }
+}]
