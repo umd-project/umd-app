@@ -103,6 +103,10 @@ const openButton = (e) => {
 const fileChange = (e) => {
     fileobj = document.querySelector("[file-input]").files[0];
     if (fileobj) {
+        const filename = fileobj.name;
+        const ext = filename.split(".").pop();
+        if(ext.toLowerCase() != "umd") return;
+
         document.querySelector("[open-button]").innerHTML = "loading ...";
         loadFile(fileobj, ""); // initially pass the pw as blank
     }
