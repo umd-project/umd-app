@@ -55,7 +55,6 @@ export default class Component {
         this.mode = mode;
     }
 
-
     toggleActionRow(e) {
         const _ele = this.ele.querySelector(".component-action-row");
         if (!this.mode) {

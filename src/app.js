@@ -5,7 +5,6 @@ try {
     var {ipcRenderer} = window.require('electron');
 }
 catch (err) {
-    console.log("not in electron environment 1", err);
 }
 
 // show the page
@@ -27,5 +26,4 @@ try {
     });
 }
 catch (err) {
-    console.log("not in electron environment 2", err);
 }

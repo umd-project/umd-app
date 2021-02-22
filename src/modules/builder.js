@@ -70,7 +70,7 @@ const html = `
         </div>
         <input edit-aspect-input class="standard r2c1 video" type="text"
             placeholder="enter aspect ratio defaults to 16:9" hidden>
-        <input edit-url-input class="standard r3c1 image md video audio form" type="text"
+        <input edit-url-input class="standard r3c1 image md video audio pdf form" type="text"
             placeholder="enter url link" hidden>
         <div edit-clear class="action clear r3c1" hidden>&#215;</div>
         <div class="message r4c1 audio image md video" hidden>-- or --</div>
@@ -330,7 +330,7 @@ export default class Builder {
                 }
             }
             else {
-                _json["content"] = _formurl;
+                _json["content"] = this.parseUrl(_formurl);
             }
             this.saveComponent(_json);
         }
@@ -600,6 +600,26 @@ export default class Builder {
     }
 
     // helper functions
+    parseUrl (url) {
+        try {
+            const _url = new URL(url);
+            const _origin = _url.origin.toLowerCase();
+            const _pathname = _url.pathname;
+            switch (_origin) {
+                case "http://www.dropbox.com":
+                case "http:/dropbox.com":
+                case "https://www.dropbox.com":
+                case "https:/dropbox.com":
+                    return `https://dl.dropboxusercontent.com${_pathname}`;
+                default:
+                    return url;
+            }
+        }
+        catch (err) {
+            return url
+        }
+    }
+
     parseVideoUrl(url) {
         // - Supported YouTube URL formats:
         //   - http://www.youtube.com/watch?v=My2FRPA3Gf8
