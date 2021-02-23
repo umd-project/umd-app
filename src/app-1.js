@@ -7,25 +7,8 @@ try {
 catch (err) {
 }
 
-const setSw = () => {
-    if (navigator.serviceWorker) {
-        navigator.serviceWorker.register("../sw.js")
-            .then(function (registration) {
-                navigator.serviceWorker.addEventListener("message", event => {
-                    //window.location.reload();
-                });
-            }).catch(function (error) {
-                console.log("ServiceWorker registration failed:", error);
-            });
-    }
-}
-
-
 // show the page
 document.querySelector(".main-container").removeAttribute("hidden");
-
-// set sw
-setSw();
 
 // set filer events
 filer.setEvents();

@@ -4,8 +4,8 @@
 //
 // Client ID and API key from the Developer Console
 //var CLIENT_ID = '510675615014-9lqtlnqb3tegh66l6mnrag5kodnf4eq6.apps.googleusercontent.com';
-var CLIENT_ID = '510675615014-2v1g2df4o4h3m8mko83cptqi6v08kigo.apps.googleusercontent.com' //"890126954059-m3as2oih4q27iju419mkpqr99ucngi6p.apps.googleusercontent.com";
-var API_KEY = 'AIzaSyBEnaFDunvaufD-A1l77_lTXefr6S25WNk'//"AIzaSyB7Dm2ZmkoszbuoZecKgl5Dd0B3QVeMIyc";
+var CLIENT_ID = "526115143718-5kfu9icc4608dob4l6pp4tgf0j11647k.apps.googleusercontent.com";
+var API_KEY = "AIzaSyB3iI0gKgwu46U1FxXLKyO1PhKtoZtn86w"
 
 // Array of API discovery doc URLs for APIs used by the quickstart
 var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
@@ -13,28 +13,9 @@ var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/res
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
 //var SCOPES = 'https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/drive.install';
-var SCOPES = "https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/drive.install"
-const authorizeButton = document.querySelector("[google-authorise]");
-const signoutButton = document.querySelector("[google-signout]");
-const errorDiv = document.querySelector("[google-error]");
+var SCOPES = "https://www.googleapis.com/auth/drive"
 
-// stores ids from url
-let fileIds = [];
-
-const authenticate = async (url) => {
-    const _j = JSON.parse(decodeURI(url));
-    fileIds = _j.ids;
-    errorDiv.removeAttribute("hidden");        
-    if(fileIds.length == 0) {
-        errorDiv.innerHTML = "no files";
-        return;
-    }
-    errorDiv.innerHTML = "authenticating ...";
-    errorDiv.removeAttribute("hidden");
-
-    await loadJS("https://apis.google.com/js/api.js");
-    gapi.load('client:auth2', initClient);
-}
+let googleAuth = false;
 
 const loadJS = (url) => {
     return new Promise(resolve => {
@@ -57,100 +38,83 @@ const initClient = () => {
         discoveryDocs: DISCOVERY_DOCS,
         scope: SCOPES
     }).then(function () {
-        // Listen for sign-in state changes.
         gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-
-        // Handle the initial sign-in state.
         updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-        authorizeButton.onclick = handleAuthClick;
-        signoutButton.onclick = handleSignoutClick;
-
-    }, function (error) {
-
-        errorDiv.innerHTML = JSON.stringify(error, null, 2);
-        errorDiv.removeAttribute("hidden");
+    }, error => {
+        console.log(error);
+        googleAuth = false;
     });
 }
 
-const handleAuthClick = (ev) => {
+function updateSigninStatus(isSignedIn) {
+    if (isSignedIn) {
+        googleAuth = true;
+    } else {
+        googleAuth = false;
+    }
+    const ev = new CustomEvent('drive-auth', {
+        bubbles: true,
+        composed: true
+    });
+    document.dispatchEvent(ev);
+}
+
+const authenticate = async (url) => {
     gapi.auth2.getAuthInstance().signIn();
 }
 
-const handleSignoutClick = (ev) => {
-    authorizeButton.removeAttribute("hidden");
-    signoutButton.setAttribute("hidden", "");
-    errorDiv.innerHTML = "";
-    errorDiv.setAttribute("hidden", "");
+const signout = () => {
     gapi.auth2.getAuthInstance().signOut();
 }
 
-function updateSigninStatus(isSignedIn) {
-    errorDiv.innerHTML = "";
-    errorDiv.setAttribute("hidden", "");
-    if (isSignedIn) {
-        authorizeButton.setAttribute("hidden", "");
-        signoutButton.removeAttribute("hidden");
-        let filename = "untitled.umd"; // default set will be overwritten below
-        if (fileIds.length > 0) {
-            errorDiv.innerHTML = "loading ...";
-            errorDiv.removeAttribute("hidden");
-            getFilename(fileIds[0])
-                .then(_name => {
-                    filename = _name;
-                    return downloadFile(fileIds[0]);
-                })
-                .then(blob => {
-                    if (blob) {
-                        const _file = new File([blob], filename);
-                        const ev = new CustomEvent("drive-file", {
-                            bubbles: true,
-                            composed: true,
-                            detail: {
-                                "file": _file
-                            }
-                        });
-                        document.dispatchEvent(ev);
-                    }
-                    errorDiv.innerHTML = "";
-                    errorDiv.setAttribute("hidden", "");
-                });
-        }
-    } else {
-        //authorizeButton.removeAttribute("hidden");
-        //authorizeButton.click();
-        handleAuthClick();
-        signoutButton.setAttribute("hidden", "");
-    }
+const getStarted = async () => {
+    await loadJS("https://apis.google.com/js/api.js");
+    gapi.load('client:auth2', initClient);
 }
 
-const getFilename = (id) => {
+const listFiles = () => {
     return new Promise(resolve => {
-        var request = gapi.client.drive.files.get({
-            'fileId': id
-        });
-        request.execute(resp => {
-            resolve(resp.name);
+        let arr = [];
+        gapi.client.drive.files.list({
+            'pageSize': 100,
+            'fields': "nextPageToken, files(id, name)"
+        }).then(function (response) {
+            var files = response.result.files;
+            if (files && files.length > 0) {
+                for (var i = 0; i < files.length; i++) {
+                    const fileid = files[i].id;
+                    const filename = files[i].name;
+                    const ext = filename.split(".").pop();
+                    if (ext.toLowerCase() == "umd") {
+                        arr.push({ "fileid": fileid, "filename": filename });
+                    }
+                }
+            }
+            resolve(arr);
         });
     })
 }
 
-const downloadFile = (id) => {
+const fetchFile = (id, filename) => {
+    const token = gapi.auth.getToken().access_token;
     return new Promise(resolve => {
-        const _url = `https://www.googleapis.com/drive/v3/files/${id}?alt=media`;
-        var accessToken = gapi.auth.getToken().access_token;
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', _url);
-        xhr.responseType = 'blob';
-        xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-        xhr.onload = function (e) {
-            resolve(xhr.response)
-        };
-        xhr.onerror = function (err) {
-            console.log(err)
-            resolve(null);
-        };
-        xhr.send();
+        fetch("https://www.googleapis.com/drive/v3/files/" + id + '?alt=media', {
+            "method": "GET",
+            headers: {
+                'Content-Type': 'application/zip',
+                'Authorization': 'Bearer '+ token,
+            }
+        })
+        .then(resp => {
+            return resp.blob();
+        })
+        .then(blob => {
+            const file = new File([blob], filename);
+            resolve(file);
+        });
     });
 }
 
-export { authenticate };
+getStarted();
+
+export { googleAuth, authenticate, signout, listFiles, fetchFile };

@@ -455,7 +455,7 @@ input {
 
 .drive-container {
     display: grid;
-    grid-template-rows: max-content auto;
+    grid-template-rows: max-content max-content auto;
     grid-template-columns: auto;
     grid-row-gap: 1.6rem;
     justify-items: center;
@@ -503,6 +503,17 @@ input {
     align-items: center;
     justify-items: center;
     justify-content: center;
+}
+
+.drive-list {
+    display: grid;
+    grid-auto-rows: max-content;
+    grid-template-columns: auto;
+    grid-row-gap: 1.6rem;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
 }
 
 .spacer-8 {

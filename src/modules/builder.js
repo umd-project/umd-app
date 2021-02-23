@@ -69,7 +69,7 @@ const html = `
             <div class="text-editor"></div>
         </div>
         <input edit-aspect-input class="standard r2c1 video" type="text"
-            placeholder="enter aspect ratio defaults to 16:9" hidden>
+            placeholder="enter aspect ratio, e.g 16:9" hidden>
         <input edit-url-input class="standard r3c1 image md video audio pdf form" type="text"
             placeholder="enter url link" hidden>
         <div edit-clear class="action clear r3c1" hidden>&#215;</div>
@@ -103,7 +103,7 @@ const html = `
 <div download-confirmation class="download-container" hidden>
     <div class="message">Document Settings</div>
     <input download-filename-input class="standard" type="text" placeholder="enter valid filename">
-    <input download-password-input class="standard" type="text" placeholder="case-sensitive password if required">
+    <input download-password-input class="standard" type="text" placeholder="optinal password">
     <div class="standard transparent">
         <input download-readonly-input type="checkbox" name="readonly" value="Y">
         <label for="readonly">Set document to Read-only</label

@@ -10,9 +10,8 @@
     <meta property="og:image" content="/assets/images/logo-300x300.png">
     <meta property="og:image:width" content="300">
     <meta property="og:image:height" content="300">
-    <!-- Manifest for PWA app currently disabled
-        
-    <link rel="manifest" href="manifest.json"> -->
+    <!-- Manifest for PWA app -->
+    <link rel="manifest" href="manifest.json"> 
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -47,14 +46,15 @@
             </a>
         </header>
         <div class="tab-bar invisible">
-            <div id="tab-drive" class="tab" title="google drive authorisation" hidden>
+            <div id="tab-drive" class="tab" title="google drive files" hidden>
                 <div></div>
                 <div class="tab-title">Drive</div>
+                <div id="drive-close" class="tab-action icon-close"></div>
             </div>
             <div id="tab-new" class="tab" title="new tab">
                 <div></div>
                 <div class="tab-title icon-L">&plus;</div>
-                <div></div>
+                <div ></div>
             </div>
         </div>
         <div class="tab-container">
@@ -62,12 +62,15 @@
                 <div class="filer-container">
                     <h3>Universal Markup Document</h3>
                     <h6>&nbsp;</h6>
-                    <button new-button class="standard">New Document</button>
+                    <button new-button class="standard">New Umd</button>
                     <h5>-- or --</h5>
-                    <button open-button class="standard">Open Document</button>
+                    <button open-button class="standard" title="Open UMD Files from your local drive">Open Local Umd</button>
                     <input file-input type="file" accept=".umd" hidden>
                     <h5>-- or --</h5>
-                    <input url-input class="standard" type="text" placeholder="enter doc link">
+                    <button open-drive-button class="standard" title="Open UMD files from your Google Drive" hidden>Open Google Drive Umd</button>
+                    <button authorise-drive-button class="standard" title = "Authorise access to your Google Drive Files" hidden>Authorise Drive Access</button>
+                    <h5>-- or --</h5>
+                    <input url-input class="standard" type="text" placeholder="enter Umd link">
                     <div class="spacer-8"></div>
                     <h6 terms class="spacer-32 link" data-url="./assets/files/terms.umd">Terms of Use</h6>
                 </div>
@@ -78,10 +81,9 @@
                 </div>
             </div>
             <div id="doc-drive" class="doc drive-container visuallyhidden">
-                <div class="message">Google Drive Authentication</div>
-                <button google-authorise class="standard" hidden>Authorise</button>
-                <button google-signout class="standard" hidden>Signout</button>
-                <div google-error hidden class="small"></div>
+                <button signout-drive-button class="standard" title="Signout of your Google Drive">Signout</button>
+                <h4>Google Drive Files</h4>
+                <div id="drive-file-list" class="drive-list"></div>
             </div>
             <div class="footer">
                 <img src="https://img.shields.io/badge/©-RmR-blue">

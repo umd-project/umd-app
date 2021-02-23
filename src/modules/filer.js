@@ -6,7 +6,7 @@
 import Umd from "./Umd.min.js";
 import Builder from "./builder.js";
 import * as Drive from "./drive.js";
-import { saveAs }  from 'file-saver';
+import { saveAs } from 'file-saver';
 
 let docarr = [];
 let fileobj = null;
@@ -25,6 +25,12 @@ const setEvents = () => {
     document.querySelector("#tab-new").addEventListener("click", switchTab);
     document.querySelector("#tab-drive").addEventListener("click", switchTab);
     document.querySelector("[terms]").addEventListener("click", loadTerms);
+    document.querySelector("[authorise-drive-button]").addEventListener("click", authoriseDrive);
+    document.querySelector("[open-drive-button]").addEventListener("click", listDriveDocs);
+    document.querySelector("[signout-drive-button]").addEventListener("click", signoutDrive);
+    document.querySelector("#drive-close").addEventListener("click", closeDrive);
+
+    document.addEventListener("drive-auth", updateGoogleDriveButtons);
     // google drive related event
     //  document.addEventListener("drive-file", loadDriveFile);
     // check for url in queryString
@@ -48,7 +54,20 @@ const setEvents = () => {
         // remove tabbar invisibility
         document.querySelector(".tab-bar").classList.remove("invisible");
         //
-        Drive.authenticate(_state);
+        //Drive.authenticate(_state);
+    }
+    // check for google drive auth status
+    updateGoogleDriveButtons();
+}
+
+const updateGoogleDriveButtons = () => {
+    if (Drive.googleAuth) { // if authenticated
+        document.querySelector("[authorise-drive-button]").setAttribute("hidden", "");
+        document.querySelector("[open-drive-button]").removeAttribute("hidden");
+    }
+    else {
+        document.querySelector("[open-drive-button]").setAttribute("hidden", "");
+        document.querySelector("[authorise-drive-button]").removeAttribute("hidden");
     }
 }
 
@@ -65,8 +84,6 @@ const switchTab = (e) => {
     if (!_id) return;
 
     // set active
-    //document.querySelectorAll(".tab").forEach(ele => ele.classList.remove("tab-active"));
-    //e.currentTarget.classList.add("tab-active");
     setTabActive(_id);
 
     // show doc
@@ -105,7 +122,7 @@ const fileChange = (e) => {
     if (fileobj) {
         const filename = fileobj.name;
         const ext = filename.split(".").pop();
-        if(ext.toLowerCase() != "umd") return;
+        if (ext.toLowerCase() != "umd") return;
 
         document.querySelector("[open-button]").innerHTML = "loading ...";
         loadFile(fileobj, ""); // initially pass the pw as blank
@@ -219,19 +236,11 @@ const loadFile = (file, pw) => {
         });
 }
 
-const loadBlob = (blob) => {
-    const _url = URL.createObjectURL(blob);
-    alert("received blob and url:", _url, blob);
-} 
-
 const addDoc = (file, umd) => {
 
     const _filetuple = splitFilename(umd.filename);
     const _name = `${_filetuple.primary}.${_filetuple.ext}`;
     umd.registerListener((val) => setFilename(val));
-    //umd.registerListener(function(val) {
-    //    console.log("changed:", val);
-    //});
     // generate id
     const _id = generateId("");
 
@@ -347,19 +356,19 @@ const setFilename = (umd) => {
     }
     else {
         if (_thisumd.isEdited) {
-//            if (_thisumd.hasChanged) {
-                // show download
-                //_actionele.innerHTML = "&#8615"; //"&#11015;"
-                _actionele.classList.add("icon-download");
-                _actionele.title = "download document";
-                _actionele.setAttribute("data-action", "download");
-                document.querySelector(`#name-${_id}`).innerHTML = `${_thisumd.filename}*`;
- //           }
- //           else {
- //               _actionele.innerHTML = "";
- //               _actionele.setAttribute("data-action", "");
- //               document.querySelector(`#name-${_id}`).innerHTML = `${_thisumd.filename}`;
- //           }
+            //            if (_thisumd.hasChanged) {
+            // show download
+            //_actionele.innerHTML = "&#8615"; //"&#11015;"
+            _actionele.classList.add("icon-download");
+            _actionele.title = "download document";
+            _actionele.setAttribute("data-action", "download");
+            document.querySelector(`#name-${_id}`).innerHTML = `${_thisumd.filename}*`;
+            //           }
+            //           else {
+            //               _actionele.innerHTML = "";
+            //               _actionele.setAttribute("data-action", "");
+            //               document.querySelector(`#name-${_id}`).innerHTML = `${_thisumd.filename}`;
+            //           }
         }
         else {
             // show edit
@@ -528,14 +537,70 @@ const loadTerms = (e) => {
         document.querySelector("[url-input]").value = _url;
         openUrl(e);
         // analytics
-        //ga("send", {
-        //    hitType: "event",
-        //    eventCategory: "read",
-        //    eventAction: "terms"
-        //});
         gtag("event", "read_terms");
     }
 }
+
+const authoriseDrive = (e) => {
+    Drive.authenticate();
+}
+
+const signoutDrive = (e) => {
+    Drive.signout();
+    document.querySelector("#drive-close").click();
+}
+
+const listDriveDocs = async (e) => {
+    // remove tabbar invisibility if so
+    const _tabbar = document.querySelector(".tab-bar");
+    _tabbar.classList.remove("invisible");
+    // unhide drive tab
+    document.querySelector("#tab-drive").removeAttribute("hidden");
+    // set drive as active tab
+    document.querySelector("#tab-drive").click();
+    // clear list
+    const _listele = document.querySelector("#drive-file-list");
+    _listele.innerHTML = "";
+    // load file list
+    const arr = await Drive.listFiles();
+    if(arr.length == 0) {
+        _listele.innerHTML = "no umd files in drive";
+        return;
+    }
+    // else 
+    for(let i=0; i < arr.length; i++) {
+        const _filerow = document.createElement("div");
+        _filerow.classList.add("standard");
+        _filerow.innerHTML = arr[i].filename;
+        _filerow.setAttribute("data-fileid", arr[i].fileid);
+        _filerow.setAttribute("data-filename", arr[i].filename);
+        _filerow.setAttribute("data-weblink", arr[i].weblink);
+        _filerow.addEventListener("click", downloadDriveFile)
+        _listele.appendChild(_filerow);
+    } 
+
+}
+
+const closeDrive = (e) => {
+    e.stopPropagation();
+    document.querySelector("#tab-new").click();
+    document.querySelector("#tab-drive").setAttribute("hidden", "");
+    if (docarr.length == 0) {
+        document.querySelector(".tab-bar").classList.add("invisible");
+    }
+}
+
+const downloadDriveFile = async (e) => {
+    const _ele = e.currentTarget;
+    const _fileid = _ele.getAttribute("data-fileid");
+    const _filename = _ele.getAttribute("data-filename");
+
+    document.querySelector("#drive-close").click();
+    document.querySelector("[open-button]").innerHTML = "loading ...";
+    const _file = await Drive.fetchFile(_fileid, _filename);
+    loadFile(_file);
+}
+
 
 const loadDriveFile = (e) => {
     if (!e.detail) return;
@@ -563,4 +628,4 @@ const generateId = () => {
     return `${Math.random().toString(36).substr(2, 9)}`;
 }
 
-export { setEvents, loadFile, loadBlob }
+export { setEvents, loadFile }
