@@ -43,16 +43,7 @@
 }
 
 .install {
-    height: 3.6rem;
-    line-height: 3.6rem;
-    padding-left: 0.8rem;
-    padding-right: 0.8rem;
-    color: #fafafa;
-    background-color: #1e1e1e;
-    text-align: center;
-    font-size: 1.1rem;
-    margin-right: 1.6rem;
-    cursor: pointer;
+    margin-right: 1.6rem !important;
 }
 
 .tab-bar {

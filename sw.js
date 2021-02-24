@@ -1,5 +1,5 @@
 var TIMEOUT = 400;
-var CACHE = "umd-0.5";
+var CACHE = "umd-0.5.0.2";
 
 var precacheList = [
   "/assets/images/logo-300x300.png",

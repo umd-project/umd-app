@@ -1,18 +1,40 @@
 {
-    "name": "UMD App",
-    "short_name": "UMD App",
-    "background_color": "#1e1e1e",
-    "display": "standalone",
-    "orientation": "portrait",
-    "theme_color": "#1e1e1e",
-    "scope": "/",
-    "start_url": "/",
-    "icons": [
-      {
-        "src": "./assets/images/logo-300x300.png",
-        "sizes": "300x300",
-        "type": "image/png"
-      }
-    ],
-    "splash_pages": null
+  "name": "UMD App",
+  "short_name": "UMD App",
+  "background_color": "#1e1e1e",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#1e1e1e",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "./assets/images/logo-300x300.png",
+      "sizes": "300x300",
+      "type": "image/png"
+    },
+    {
+      "src": "./assets/images/maskable_icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "splash_pages": null,
+  "share_target": {
+    "action": "/",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [
+        {
+          "name": "umd-docs",
+          "accept": [
+            "application/zip",
+            ".umd"
+          ]
+        }
+      ]
+    }
   }
+}
