@@ -195,6 +195,7 @@ const inputKeyup = (e) => {
 
 const onPasswordSet = (e) => {
     const _pw = document.querySelector("[password-input").value;
+    document.querySelector("[password-input").setAttribute("placeholder", "");
     if (fileobj && _pw) {
         loadFile(fileobj, _pw); // initially pass the pw as blank
         // reset screen
@@ -206,6 +207,8 @@ const onPasswordSet = (e) => {
 const onPasswordClose = (e) => {
     document.querySelector("[file-input]").value = "";
     document.querySelector("[password-input").value = "";
+    document.querySelector("[password-input").setAttribute("placeholder", "");
+
     // reset screen
     document.querySelector(".filer-container").classList.remove("visuallyhidden");
     document.querySelector(".password-container").classList.add("visuallyhidden");
@@ -231,6 +234,13 @@ const loadFile = (file, pw) => {
             if (err == "password-required") {
                 document.querySelector(".filer-container").classList.add("visuallyhidden");
                 document.querySelector(".password-container").classList.remove("visuallyhidden");
+                document.querySelector("[password-input").value = "";
+                if(pw) {
+                    document.querySelector("[password-input").setAttribute("placeholder", "Invalid Password");
+                }
+                else {
+                    document.querySelector("[password-input").setAttribute("placeholder", "Enter Password");
+                }
                 document.querySelector("[password-input]").focus();
             }
         });

@@ -26,7 +26,10 @@ let _deferredPrompt;
 
 // installApp function
 const installApp = (e) => {
-    _deferredPrompt.prompt();
+     // analytics
+     gtag("event", "install");
+    //
+     _deferredPrompt.prompt();
     // Wait for the user to respond to the prompt
     _deferredPrompt.userChoice
         .then(choiceResult => {
