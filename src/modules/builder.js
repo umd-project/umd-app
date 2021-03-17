@@ -68,9 +68,9 @@ const html = `
         <div class="text text-editor-toolbar r1c1" hidden>
             <div class="text-editor"></div>
         </div>
-        <input edit-aspect-input class="standard r2c1 video" type="text"
+        <input edit-aspect-input class="standard r2c1 video presentation" type="text"
             placeholder="enter aspect ratio, e.g 16:9" hidden>
-        <input edit-url-input class="standard r3c1 image md video audio pdf form" type="text"
+        <input edit-url-input class="standard r3c1 image md video audio pdf form presentation" type="text"
             placeholder="enter url link" hidden>
         <div edit-clear class="action clear r3c1" hidden>&#215;</div>
         <div class="message r4c1 audio image md video" hidden>-- or --</div>
@@ -90,6 +90,7 @@ const html = `
         <div id="md" class="action icon-md" title="markdown component"></div>
         <div id="pdf" class="action icon-pdf" title="pdf component"></div>
         <div id="video" class="action icon-video" title="video component"></div>
+        <div id="presentation" class="action icon-presentation" title="presentation component"></div>
         <div id="form" class="action icon-form" title="form component"></div>
     </div>
 </div>
@@ -610,7 +611,7 @@ export default class Builder {
                 case "http:/dropbox.com":
                 case "https://www.dropbox.com":
                 case "https:/dropbox.com":
-                    return `https://dl.dropboxusercontent.com${_pathname}`;
+                    return `https://dl.dropboxusercontent.com${_pathname}`;    
                 default:
                     return url;
             }

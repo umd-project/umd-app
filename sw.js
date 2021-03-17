@@ -1,10 +1,7 @@
 var TIMEOUT = 400;
-var CACHE = "umd-0.5.0.4";
+var CACHE = "umd-0.5.1.2";
 
 var precacheList = [
-  "/assets/images/logo-300x300.png",
-  "/assets/images/bullet.png",
-  "/assets/images/nav-bg.gif"
 ];
 
 var cacheNetworkList = [
@@ -67,6 +64,7 @@ function preCacheOnly(event) {
 // get from cache and update from network
 function cacheNetwork(event) {
   const url = new URL(event.request.url);
+  //console.log('cacheNetwork:', url);
   event.respondWith(
     caches.open(CACHE).then(function (cache) {
       return cache.match(event.request).then(function (response) {
@@ -82,6 +80,8 @@ function cacheNetwork(event) {
 
 // get from network and update cache
 function networkCache(event) {
+  const url = new URL(event.request.url);
+  //console.log('networkCache:', url);
   event.respondWith(
     caches.open(CACHE).then(function (cache) {
       return cache.match(event.request).then(function (response) {
@@ -100,6 +100,7 @@ function networkCache(event) {
 self.addEventListener("fetch", function (event) {
   var url = new URL(event.request.url);
   var path = url.pathname;
+  //console.log("fetch:", url);
   if (precacheList.indexOf(path) != -1) {
     //console.log("precached", path);
     self.preCacheOnly(event);
